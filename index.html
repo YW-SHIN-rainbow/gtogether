@@ -336,10 +336,14 @@
     </div>
 
     <script>
+        // *** 중요: 여기에 배포한 Google Apps Script 웹 앱 URL을 붙여넣으세요 ***
+        // 예시: const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz/exec';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbziUbynDtTNqMm9264RsCMWNTInlMFX7sHVUNL81W6FEHDZOvnPoP9sAZkTHZuqGobO/exec'; // << 반드시 이 부분을 배포한 웹 앱 URL로 변경해주세요!
+
         // Business Plan Markdown Content as a JavaScript string
         const businessPlanMarkdown = `
 # AI기반의 강점관점 사례관리 파트너
-# [함께성장] 사업계획서
+# 함께성장 사업계획서
 
 ## 1. 개요
 
@@ -537,31 +541,43 @@
             submitBtn.disabled = true;
             submitBtn.textContent = '등록 중...';
 
-            // google.script.run을 사용하여 서버 함수 호출
-            google.script.run
-                .withSuccessHandler(function() {
+            // fetch API를 사용하여 Apps Script 웹 앱으로 데이터 전송
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'cors', // CORS 정책 허용
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: name, message: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
                     // 성공 메시지는 표시하지 않음
                     // 폼 필드 초기화
                     document.getElementById('name').value = '';
                     document.getElementById('message').value = '';
 
                     // 임시로 새로운 항목을 클라이언트 사이드에 추가하여 즉시 반영
-                    // 참고: 서버에서 반환되는 정확한 시간 형식이 아닌, 클라이언트 시간 기준으로 표시됩니다.
-                    // 정확한 동기화를 위해서는 서버 응답에 시간 정보가 포함되어야 합니다.
-                    const now = new Date().toLocaleString('ko-KR');
+                    // 서버에서 정확한 시간 정보가 반환되면 더욱 좋습니다.
+                    const now = new Date().toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
                     const tempEntry = { name: name, message: message, date: now };
                     displaySingleEntry(tempEntry, true); // 새로운 항목을 맨 앞에 추가
-                })
-                .withFailureHandler(function(error) {
-                    showMessage('오류가 발생했습니다: ' + error.message, 'error');
-                })
-                .saveGuestbookEntry(name, message);
-
-            // 2초 후 버튼 다시 활성화 (성공/실패와 무관하게 UX 개선)
-            setTimeout(function() {
-                submitBtn.disabled = false;
-                submitBtn.textContent = '등록하기';
-            }, 2000);
+                } else {
+                    showMessage('오류가 발생했습니다: ' + (data.message || '알 수 없는 오류'), 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Submit Error:', error);
+                showMessage('데이터 전송 중 오류가 발생했습니다: ' + error.message, 'error');
+            })
+            .finally(() => {
+                // 2초 후 버튼 다시 활성화 (성공/실패와 무관하게 UX 개선)
+                setTimeout(function() {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '등록하기';
+                }, 2000);
+            });
         }
 
         // Enter 키로 폼 제출
@@ -579,13 +595,25 @@
         function loadEntries() {
             document.getElementById('entriesList').innerHTML = '<div class="text-center text-gray-600 py-6 loading">방명록을 불러오는 중...</div>';
 
-            google.script.run
-                .withSuccessHandler(displayEntries)
-                .withFailureHandler(function(error) {
-                    console.error('방명록 로드 오류:', error);
-                    document.getElementById('entriesList').innerHTML = '<div class="text-center bg-red-100 text-red-800 p-3 rounded-lg border border-red-200">방명록을 불러오는데 실패했습니다.</div>';
-                })
-                .getGuestbookEntries();
+            // fetch API를 사용하여 Apps Script 웹 앱에서 데이터 가져오기
+            fetch(WEB_APP_URL, {
+                method: 'GET',
+                mode: 'cors' // CORS 정책 허용
+            })
+            .then(response => response.json())
+            .then(entries => {
+                if (Array.isArray(entries)) { // 응답이 배열인지 확인 (오류 응답이 아닐 경우)
+                    displayEntries(entries);
+                } else {
+                    // 오류 응답이거나 예상치 못한 형식일 경우
+                    console.error('Load Error: Unexpected data format', entries);
+                    document.getElementById('entriesList').innerHTML = '<div class="text-center bg-red-100 text-red-800 p-3 rounded-lg border border-red-200">방명록을 불러오는데 실패했습니다. (데이터 형식 오류)</div>';
+                }
+            })
+            .catch(error => {
+                console.error('Load Error:', error);
+                document.getElementById('entriesList').innerHTML = '<div class="text-center bg-red-100 text-red-800 p-3 rounded-lg border border-red-200">방명록을 불러오는데 실패했습니다. (네트워크 오류)</div>';
+            });
         }
 
         /**

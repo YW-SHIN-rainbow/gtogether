@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI기반의 강점관점 사례관리 파트너: 함께성장</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- marked.js CDN for Markdown to HTML conversion -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+    <!-- Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom scrollbar for better aesthetics */
+        #entriesList::-webkit-scrollbar {
+            width: 8px;
+        }
+        #entriesList::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        #entriesList::-webkit-scrollbar-thumb {
+            background: #cbd5e1; /* Tailwind's gray-400 */
+            border-radius: 4px;
+        }
+        #entriesList::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; /* Tailwind's gray-500 */
+        }
+
+        /* Applying Inter font and body background */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background from business presentation */
+            color: #334155; /* Darker text from business presentation */
+        }
+
+        /* Business presentation specific styles (retained for elements that aren't in modal) */
+        .feature-card, .benefit-card {
+            background-color: #ffffff;
+            border-radius: 1rem; /* rounded-xl */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+            padding: 1.5rem; /* p-6 */
+            display: flex;
+            align-items: flex-start; /* Align icon and text at the top */
+            gap: 1rem; /* space-x-4 */
+        }
+        .feature-icon, .benefit-icon {
+            flex-shrink: 0;
+            font-size: 3rem; /* Adjusted for better visual balance */
+            line-height: 1; /* Ensure icon doesn't add extra line height */
+        }
+        .infographic-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 100px; /* Ensure steps have some minimum width */
+            text-align: center;
+        }
+        .infographic-arrow {
+            font-size: 2.5rem; /* Larger arrow */
+            color: #8b5cf6; /* purple-500 */
+            margin: 0 0.5rem; /* Smaller margin for tighter fit */
+            flex-shrink: 0; /* Prevent arrow from shrinking */
+        }
+        @media (max-width: 768px) {
+            .infographic-flow {
+                flex-direction: column; /* Stack vertically on small screens */
+            }
+            .infographic-arrow {
+                transform: rotate(90deg); /* Rotate arrow for vertical flow */
+                margin: 0.5rem 0; /* Smaller margin for vertical flow */
+            }
+        }
+
+        /* Modal specific styles */
+        .modal-content {
+            max-height: 90vh; /* Limit height to 90% of viewport height */
+            overflow-y: auto; /* Enable scrolling for modal content */
+        }
+        /* Custom scrollbar for modal content */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1; /* Tailwind's gray-400 */
+            border-radius: 4px;
+        }
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; /* Tailwind's gray-500 */
+        }
+        
+        /* Markdown specific styles within modal for better aesthetics */
+        .markdown-body h1 {
+            font-size: 2.5rem; /* text-4xl */
+            font-weight: 700; /* font-bold */
+            color: #1a202c; /* gray-900 for dark black */
+            margin-bottom: 1.5rem; /* Increased margin */
+            text-align: center;
+            line-height: 1.3; /* Adjusted for better spacing */
+        }
+        .markdown-body h2 {
+            font-size: 2rem; /* text-3xl */
+            font-weight: 600; /* font-semibold */
+            color: #1a202c; /* gray-900 for dark black */
+            margin-top: 2.5rem; /* Increased margin */
+            margin-bottom: 1rem;
+            line-height: 1.4; /* Adjusted for better spacing */
+        }
+        .markdown-body h3 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600; /* font-semibold */
+            color: #1a202c; /* gray-900 for dark black */
+            margin-top: 2rem; /* Increased margin */
+            margin-bottom: 0.75rem;
+            line-height: 1.5; /* Adjusted for better spacing */
+        }
+        .markdown-body p {
+            margin-bottom: 1rem;
+            line-height: 1.7; /* Adjusted for better paragraph line spacing */
+            color: #334155; /* Darker text from body */
+        }
+        .markdown-body strong {
+            font-weight: 700; /* font-bold */
+            color: #1a202c; /* Ensure bold text is black */
+        }
+        .markdown-body ul {
+            list-style-type: disc;
+            margin-left: 1.5rem; /* pl-6 */
+            margin-bottom: 1rem;
+            line-height: 1.7; /* Apply line-height to list items too */
+        }
+        .markdown-body ul li {
+            margin-bottom: 0.5rem;
+            color: #334155; /* Darker text from body */
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center min-h-screen p-4 sm:p-6 lg:p-8">
+    <!-- Business Presentation Summary Section -->
+    <div class="max-w-4xl w-full bg-white rounded-xl shadow-lg p-6 sm:p-8 lg:p-10 mb-8">
+        <!-- Header Section -->
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-normal">
+                AI기반의 강점관점 사례관리 파트너: <br>
+                <span class="text-gray-900">함께성장</span>
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-600 leading-relaxed">
+                사회복지 현장의 실천가 여러분, 안녕하세요! 우리는 매일 현장에서 당사자들의 어려움을 함께 나누고, 그들의 삶에 긍정적인 변화를 만들기 위해 노력하고 있습니다. 하지만 한정된 시간과 자원 속에서 때로는 더 효과적인 방법을 고민하기도 합니다.
+            </p>
+            <p class="text-lg sm:text-xl text-gray-600 mt-2 leading-relaxed">
+                이제, AI 기반 강점 중심 사례관리 시스템이 실천가 여러분의 든든한 동반자가 되어 드리고자 합니다.
+            </p>
+        </header>
+
+        <!-- What Makes This System Different Section -->
+        <section class="mb-12">
+            <h2 class="text-2xl sm:text-3xl font-semibold text-gray-900 text-center mb-8 leading-normal">이 시스템은 무엇이 다를까요?</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                <!-- Feature 1: Strength Focus -->
+                <div class="feature-card bg-blue-50">
+                    <div class="feature-icon text-blue-500">🌟</div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2 leading-normal">'문제'가 아닌 '강점'에 집중합니다</h3>
+                        <p class="text-gray-700 leading-relaxed">당사자가 가진 고유한 강점과 잠재력을 발견하고, 이를 활용하여 스스로 문제를 해결하고 성장할 수 있도록 지원합니다.</p>
+                    </div>
+                </div>
+                <!-- Feature 2: Customized Support -->
+                <div class="feature-card bg-green-50">
+                    <div class="feature-icon text-green-500">🎯</div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2 leading-normal">'나'를 중심으로 맞춤 지원합니다: 데이터 기반 맞춤형 솔루션</h3>
+                        <p class="text-gray-700 leading-relaxed">개인의 상담 기록, AI 앱(챗봇, AI 돌보미 서비스 등) 사용 데이터 등 당사자의 동의하에 수집된 정보를 종합적으로 분석하여 각자에게 꼭 필요한 맞춤형 솔루션을 제안합니다. 더 이상 일률적인 접근이 아닌, 한 사람 한 사람에게 최적화된 지원이 가능해집니다.</p>
+                    </div>
+                </div>
+                <!-- Feature 3: Data-Driven Guidance -->
+                <div class="feature-card bg-yellow-50">
+                    <div class="feature-icon text-yellow-500">📊</div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2 leading-normal">데이터가 길을 안내합니다: 지능적인 개입 전략 추천</h3>
+                        <p class="text-gray-700 leading-relaxed">과거의 수많은 성공 및 실패 사례, 공공데이터, 그리고 축적된 법률 및 제도 지원 선례까지 학습한 AI가 현재 상황을 예측하고 가장 효과적인 개입 전략을 추천하여 실천가의 전문적인 판단을 돕습니다. 이는 마치 숙련된 선배의 노하우가 집약된 것과 같아, 사례관리 슈퍼비전 회의를 보완할 수도 있습니다.</p>
+                    </div>
+                </div>
+                <!-- Feature 4: Resource Connection -->
+                <div class="feature-card bg-purple-50">
+                    <div class="feature-icon text-purple-500">🔗</div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2 leading-normal">숨겨진 자원까지 연결합니다: 폭넓은 지지망 구축</h3>
+                        <p class="text-gray-700 leading-relaxed">개인의 노력뿐만 아니라, 가족, 친구, 지역사회 자원 (실천가가 손쉽게 입력하고 관리 가능), 그리고 필요한 법적·제도적 지원까지 폭넓게 탐색하고 연결하여 든든한 지지망을 구축합니다.</p>
+                    </div>
+                </div>
+                <!-- Feature 5: Crisis Intervention -->
+                <div class="feature-card bg-red-50 lg:col-span-2">
+                    <div class="feature-icon text-red-500">🚨</div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2 leading-normal">위기 상황에서는 가장 빠른 해결책을 제시합니다</h3>
+                        <p class="text-gray-700 leading-relaxed">긴급한 위기 상황 발생 시, AI는 신속하게 상황을 분석하고 가장 효과적인 위기 개입 방법을 안내하여 골든타임을 놓치지 않도록 지원합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Management Procedure Infographic Section -->
+        <section class="mb-12 py-8 bg-indigo-50 rounded-xl shadow-inner">
+            <h2 class="text-2xl sm:text-3xl font-semibold text-gray-900 text-center mb-8 leading-normal">
+                사례관리 절차, <span class="text-gray-900">'함께성장'</span>과 함께라면!
+            </h2>
+            <div class="flex flex-col md:flex-row items-center justify-center infographic-flow w-full px-4">
+                <div class="infographic-step">
+                    <div class="text-5xl text-blue-500">📝</div>
+                    <h3 class="text-base font-semibold text-gray-800 leading-normal">1. 초기 사정</h3>
+                </div>
+                <div class="infographic-arrow">➔</div>
+                <div class="infographic-step">
+                    <div class="text-5xl text-green-500">📋</div>
+                    <h3 class="text-base font-semibold text-gray-800 leading-normal">2. 계획 수립</h3>
+                </div>
+                <div class="infographic-arrow">➔</div>
+                <div class="infographic-step">
+                    <div class="text-5xl text-yellow-500">🤝</div>
+                    <h3 class="text-base font-semibold text-gray-800 leading-normal">3. 서비스 실행</h3>
+                </div>
+                <div class="infographic-arrow">➔</div>
+                <div class="infographic-step">
+                    <div class="text-5xl text-purple-500">📈</div>
+                    <h3 class="text-base font-semibold text-gray-800 leading-normal">4. 점검 & 평가</h3>
+                </div>
+                <div class="infographic-arrow">➔</div>
+                <div class="infographic-step">
+                    <div class="text-5xl text-red-500">🚀</div>
+                    <h3 class="text-base font-semibold text-gray-800 leading-normal">5. 피드백 & 성장</h3>
+                </div>
+            </div>
+            <center><p class="text-lg sm:text-xl font-semibold text-gray-900 mt-8 text-center max-w-2xl leading-relaxed">
+                AI가 각 단계에서 실천가를 든든하게 지원하여 업무 효율을 극대화하고, <br class="hidden sm:inline">당사자 중심의 실천을 돕습니다. 종결에서 성장으로 나아갑니다.
+            </center></p>
+        </section>
+
+        <!-- What Can We Expect Section -->
+        <section class="mb-12">
+            <h2 class="text-2xl sm:text-3xl font-semibold text-gray-900 text-center mb-8 leading-normal">이 시스템을 통해 우리는 무엇을 기대할 수 있을까요?</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Benefit 1: Social Worker Focus -->
+                <div class="benefit-card bg-blue-100 flex-col items-center text-center">
+                    <div class="benefit-icon text-blue-900">🧑‍💻</div>
+                    <h3 class="text-xl font-semibold text-blue-900 mb-2 leading-normal">사회복지 실천가는 더욱 전문적인 역할에 집중할 수 있습니다</h3>
+                    <p class="text-gray-700 leading-relaxed">반복적인 정보 검색이나 행정 업무 부담은 획기적으로 줄어들어 실천가의 수작업 부담이 경감됩니다. 이를 통해 당사자와의 깊이 있는 관계 형성기와 전문적인 상담에 더 많은 시간을 할애할 수 있습니다.</p>
+                </div>
+                <!-- Benefit 2: Client Growth -->
+                <div class="benefit-card bg-green-100 flex-col items-center text-center">
+                    <div class="benefit-icon text-green-900">🌱</div>
+                    <h3 class="text-xl font-semibold text-green-900 mb-2 leading-normal">당사자는 자신의 삶의 주체로 성장합니다</h3>
+                    <p class="text-gray-700 leading-relaxed">자신의 강점을 발견하고, 스스로 목표를 설정하며, 주체적으로 문제를 해결해 나가는 경험을 통해 자존감을 회복하고 삶의 만족도를 높일 수 있습니다. 종결 이후에도 AI 앱을 통해 지속적인 맞춤형 솔루션을 받을 수 있습니다.</p>
+                </div>
+                <!-- Benefit 3: Better Service Quality & Beyond -->
+                <div class="benefit-card bg-yellow-100 flex-col items-center text-center">
+                    <div class="benefit-icon text-yellow-900">📈</div>
+                    <h3 class="text-xl font-semibold text-yellow-900 mb-2 leading-normal">더 나은 사회복지 서비스를 제공하고 새로운 가치를 창출합니다</h3>
+                    <p class="text-gray-700 leading-relaxed">데이터 기반의 객관적인 분석과 예측은 서비스의 질을 향상시키고, 한정된 자원을 보다 효과적으로 배분하는 데 기여합니다. 또한, 모든 사례는 시각적으로 제공되며, 필요시 모금 활동을 위한 스토리 작성부터 기부자에게 최신 상황이 담긴 피드백 생성까지 지원하여 새로운 가치를 창출합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conclusion Section -->
+        <section class="text-center">
+            <p class="text-lg sm:text-xl text-gray-700 mb-4 leading-relaxed">
+                AI는 사회복지 실천가를 대체하는 것이 아니라, 가장 유능하고 지혜로운 파트너가 될 것입니다. 이 새로운 시스템을 통해 우리는 당사자 중심의 기술을 실현하고, 모든 사람이 자신의 가능성을 마음껏 펼치는 사회를 함께 만들어갈 수 있을 것입니다.
+            </p>
+            <p class="text-xl sm:text-2xl font-bold text-gray-900 leading-normal">
+                많은 관심과 참여 부탁드립니다. 감사합니다.
+            </p>
+        </section>
+    </div>
+
+    <!-- Business Plan Button -->
+    <button id="openBusinessPlanBtn"
+            class="mt-8 mb-8 px-8 py-4 bg-purple-600 text-white font-bold text-lg rounded-lg shadow-xl hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-75 transition ease-in-out duration-300">
+        AI기반 강점관점 사례관리 파트너 사업계획서 보기
+    </button>
+
+    <!-- Guestbook Section -->
+    <div class="container mx-auto my-8 p-6 sm:p-8 lg:p-10 bg-white rounded-xl shadow-lg max-w-4xl">
+        <h1 class="text-center text-3xl font-extrabold text-gray-800 mb-8 tracking-tight">
+            📝 방명록
+        </h1>
+
+        <div id="guestbookForm">
+            <div class="mb-6">
+                <label for="name" class="block text-gray-700 text-sm font-semibold mb-2">이름 (닉네임):</label>
+                <input type="text" id="name" placeholder="이름을 입력하세요" required
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out">
+            </div>
+
+            <div class="mb-6">
+                <label for="message" class="block text-gray-700 text-sm font-semibold mb-2">메시지:</label>
+                <textarea id="message" placeholder="메시지를 입력하세요" required rows="4"
+                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out resize-y"></textarea>
+                <p class="text-sm font-bold text-red-600 mt-2">※ 등록된 메시지는 수정 또는 삭제가 불가능합니다.</p>
+            </div>
+
+            <div class="flex flex-wrap gap-4 justify-center sm:justify-start">
+                <button type="button" class="btn px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition ease-in-out duration-150" id="submitBtn" onclick="submitForm()">
+                    등록하기
+                </button>
+                <button type="button" class="btn btn-secondary px-6 py-3 bg-gray-500 text-white font-semibold rounded-lg shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 transition ease-in-out duration-150" onclick="loadEntries()">
+                    새로고침
+                </button>
+            </div>
+        </div>
+
+        <div id="responseMessage" class="mt-6"></div>
+
+        <div class="mt-10">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">방명록 목록</h2>
+            <div id="entriesList" class="max-h-96 overflow-y-auto border border-gray-200 rounded-lg p-4 bg-gray-50 shadow-inner">
+                <div class="text-center text-gray-600 py-6 loading">방명록을 불러오는 중...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Business Plan Modal -->
+    <div id="businessPlanModal" class="hidden fixed inset-0 z-50 overflow-y-auto flex items-center justify-center bg-black bg-opacity-50" onclick="closeModal(event)">
+        <div class="modal-content bg-white rounded-lg shadow-xl p-8 max-w-4xl mx-auto my-8 relative" onclick="event.stopPropagation()">
+            <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl font-bold" onclick="closeModal()">
+                &times;
+            </button>
+            <!-- Markdown content will be rendered here -->
+            <div id="businessPlanContent" class="markdown-body text-gray-700 text-base">
+                <!-- Content will be injected by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Business Plan Markdown Content as a JavaScript string
+        const businessPlanMarkdown = `
+# AI기반의 강점관점 사례관리 파트너
+# [함께성장] 사업계획서
+
+## 1. 개요
+
+본 사업은 **AI기반의 강점관점 사례관리 파트너: 함께성장** 시스템 개발 및 도입을 통해 사회복지 현장의 비효율성을 해소하고, 당사자 중심의 맞춤형 서비스를 고도화하는 것을 목표로 합니다. 파편화된 데이터를 통합하고 AI 기반의 지능적인 분석 및 예측 기능을 제공하여 사회복지 실천가의 업무 부담을 획기적으로 경감하며, 당사자의 주체적인 성장을 지원합니다. 궁극적으로 데이터 기반의 투명하고 효과적인 사회복지 서비스 제공을 통해 기부자 관계 관리 및 모금 활동까지 확장하여 사회복지 생태계 전반의 선순환을 이끌어낼 것입니다.
+
+## 2. 문제 제기
+
+현재 사회복지 현장은 다음과 같은 문제에 직면해 있습니다.
+
+- **한정된 시간과 자원**: 사회복지 실천가는 제한된 시간과 자원 속에서 과도한 행정 업무와 정보 검색에 많은 시간을 할애하고 있습니다.
+
+- **비효율적인 사례 관리**: 과거의 사례 데이터, 지역사회 자원, 법률 및 제도 정보가 통합되지 못하고 분산되어 있어, 효과적인 개입 전략 수립 및 자원 연계에 어려움이 있습니다.
+
+- **당사자 중심 실천의 한계**: 일률적인 서비스 접근으로 인해 개인의 고유한 강점과 욕구에 기반한 진정한 맞춤형 지원이 어렵습니다.
+
+- **선배 노하우의 단절**: 숙련된 실천가의 경험과 지식이 시스템화되지 못하고 개인적 역량에 의존하는 경향이 있어, 인력 이탈 시 노하우가 유실될 위험이 있습니다.
+
+- **성과 측정 및 공유의 어려움**: 서비스의 질적 성과를 객관적으로 측정하고 대외적으로 투명하게 공유하여 자원 확보로 연계하는 데 한계가 있습니다.
+
+## 3. 솔루션: AI기반의 강점관점 사례관리 파트너: 함께성장
+
+**함께성장**은 AI 기술과 강점 관점 사례관리 철학을 결합하여 위에서 언급된 문제들을 해결하는 혁신적인 시스템입니다.
+
+### 3.1. 시스템 핵심 기능 및 차별점
+
+- **'문제'가 아닌 '강점'에 집중**: 당사자가 가진 고유한 강점과 잠재력을 발견하고, 이를 활용하여 스스로 문제를 해결하고 성장할 수 있도록 지원합니다.
+
+- **'나'를 중심으로 맞춤 지원: 데이터 기반 맞춤형 솔루션**:
+
+  - 개인의 상담 기록, 당사자 동의하에 수집된 **AI 앱(챗봇, AI 돌보미 서비스 등) 사용 데이터**를 종합적으로 분석합니다.
+
+  - 이를 통해 각자에게 꼭 필요한 맞춤형 솔루션을 제안하여, 일률적인 접근이 아닌 한 사람 한 사람에게 최적화된 지원을 가능하게 합니다.
+
+- **데이터가 길을 안내합니다: 지능적인 개입 전략 추천**:
+
+  - 과거의 수많은 성공 및 실패 사례, **공공데이터**, 그리고 축적된 **법률 및 제도 지원 선례(자동 수집)**까지 학습한 AI가 현재 상황을 예측하고 가장 효과적인 개입 전략을 추천합니다.
+
+  - 이는 마치 숙련된 선배 실천가의 노하우가 시스템에 집약된 것과 같아, 사례관리 슈퍼비전 회의를 보완하거나 대체할 수도 있습니다.
+
+- **숨겨진 자원까지 연결합니다: 폭넓은 지지망 구축**:
+
+  - 개인의 노력뿐만 아니라, 가족, 친구, 지역사회 자원, 필요한 법적·제도적 지원까지 폭넓게 탐색하고 연결합니다.
+
+  - **사회복지 실천가가 지역사회 자원 정보를 시스템에 손쉽게 직접 입력하고 관리**할 수 있는 기능을 제공하여, 현장의 생생한 정보를 실시간으로 반영합니다.
+
+- **위기 상황에서는 가장 빠른 해결책을 제시합니다**: 긴급한 위기 상황 발생 시, AI는 신속하게 상황을 분석하고 가장 효과적인 위기 개입 방법을 안내하여 골든타임을 놓치지 않도록 지원합니다.
+
+### 3.2. 사례관리 절차 및 AI 지원 인포그래픽
+
+**함께성장**은 사례관리의 핵심 5단계에 걸쳐 AI의 지능적인 지원을 통합합니다.
+
+- **1. 초기 사정 (📝)**: 당사자의 강점과 욕구를 사전 파악하고, 맞춤형 질문 가이드를 제공하여 실천가의 수작업 부담을 줄입니다.
+
+- **2. 계획 수립 (📋)**: AI가 최적의 개입 전략과 자원을 추천하여 실천가의 전문적 판단을 돕습니다.
+
+- **3. 서비스 실행 및 연계 (🤝)**: 폭넓은 지지망을 구축하고, 실천가가 지역사회 자원을 손쉽게 입력/관리할 수 있도록 지원하며, 위기 상황 시 신속한 개입 방안을 안내합니다.
+
+- **4. 점검 및 평가 (📈)**: 서비스 진행 상황과 당사자의 변화를 실시간으로 시각화하고, AI의 예측 분석을 바탕으로 선제적인 개입 전략 조정을 지원합니다.
+
+- **5. 피드백 & 성장 (🚀)**: 당사자의 강점 기반 성장 과정을 시각화하고, **종결 이후에도 당사자가 AI 앱을 통해 지속적인 맞춤형 솔루션을 받을 수 있도록 지원**합니다. 또한 모금 스토리 작성 및 기부자 피드백 자동 생성 기능을 통해 가시적인 성과 공유를 돕습니다.
+
+## 4. 목표 고객
+
+- **주요 고객**: 사회복지 현장의 실천가 (사회복지사, 사례관리자 등)
+
+- **간접 수혜자**: 사회복지 서비스를 이용하는 당사자
+
+- **파트너**: 사회복지 기관, 지자체, 공공기관, 기업, 기부자 등
+
+## 5. 기대 효과 및 성과
+
+**함께성장** 시스템 도입을 통해 다음과 같은 긍정적인 변화를 기대할 수 있습니다.
+
+- **사회복지 실천가의 전문성 향상**: 반복적인 정보 검색 및 행정 업무 부담이 획기적으로 줄어들어, 실천가는 당사자와의 깊이 있는 관계 형성 및 전문적인 상담에 더 많은 시간을 할애할 수 있습니다. 이는 실천가의 소진을 예방하고 직무 만족도를 높이는 데 기여합니다.
+
+- **당사자의 주체적 성장 촉진**: 자신의 강점을 발견하고, 스스로 목표를 설정하며, 주체적으로 문제를 해결해 나가는 경험을 통해 자존감을 회복하고 삶의 만족도를 높일 수 있습니다. 시스템을 통한 지속적인 지원은 당사자의 자립 역량 강화에 실질적인 도움을 줍니다.
+
+- **서비스 질 향상 및 효율적 자원 배분**: 데이터 기반의 객관적인 분석과 예측은 서비스의 질을 향상시키고, 한정된 자원을 보다 효과적으로 배분하는 데 기여합니다.
+
+- **새로운 가치 창출 및 지속 가능한 생태계 구축**: 모든 사례는 시각적으로 제공되며, 필요시 모금 활동을 위한 스토리 작성부터 기부자에게 최신 상황이 담긴 피드백 생성까지 지원하여 투명성을 높이고 기부자 관계를 강화합니다. 이는 사회복지 서비스의 지속 가능성을 높이는 데 기여합니다.
+
+## 6. 기술적 접근
+
+본 시스템은 팔란티어 AIP(Artificial Intelligence Platform)와 유사한 데이터 운영체제(Data Operating System) 구축을 지향합니다.
+
+- **데이터 통합 플랫폼**: 다양한 원천(상담 기록, AI 앱 데이터, 공공데이터, 지역사회 자원, 법률/제도 선례)의 비정형/정형 데이터를 통합하고 정제하는 강력한 데이터 파이프라인을 구축합니다.
+
+- **고급 AI/ML 모델**: 강점 분석, 예측, 추천, 자연어 처리(NLP) 등 복잡한 기능을 수행할 수 있는 맞춤형 AI 모델을 개발 및 적용합니다. 이는 '선배의 노하우'를 학습하여 지능적인 통찰을 제공하는 핵심 엔진이 됩니다.
+
+- **직관적인 UI/UX**: 사회복지 실천가가 쉽게 사용하고, 모든 정보를 직관적으로 시각화하여 한눈에 파악할 수 있는 유연한 애플리케이션 계층을 개발합니다.
+
+- **보안 및 프라이버시**: 민감한 개인 정보를 다루는 시스템인 만큼, 최고 수준의 데이터 보안 및 개인 정보 보호 프레임워크를 적용하고, 당사자 동의 기반의 데이터 활용 원칙을 철저히 준수합니다.
+
+## 7. 미래 비전 및 확장성
+
+**함께성장**은 사회복지 현장의 디지털 전환을 선도하며, 다음과 같은 미래 비전을 제시합니다.
+
+- **전국 단위 확산**: 전국 사회복지 기관 및 지자체로 시스템을 확산하여 표준화된 고품질 사례관리 서비스를 제공합니다.
+
+- **서비스 고도화**: AI 앱(챗봇, AI 돌보미)과의 연동을 더욱 강화하고, 당사자의 자가 관리 및 역량 강화를 위한 다양한 AI 기반 도구를 추가 개발합니다.
+
+- **연구 및 정책 기여**: 축적된 대규모 데이터를 활용하여 사회복지 연구 및 정책 수립에 기여하고, 더욱 효과적인 복지 모델을 개발합니다.
+
+- **글로벌 확산**: 강점 관점 기반의 AI 사례관리 모델을 국제적으로 공유하고 확산하여 인류 복지 증진에 기여합니다.
+`;
+
+        // 페이지 로드 시 방명록 목록 불러오기
+        window.onload = function() {
+            loadEntries();
+            updateParentHeight();
+
+            // 모달 관련 요소 가져오기
+            const openBusinessPlanBtn = document.getElementById('openBusinessPlanBtn');
+            const businessPlanModal = document.getElementById('businessPlanModal');
+            const businessPlanContentDiv = document.getElementById('businessPlanContent');
+
+            // Render Markdown content into the modal when it's ready or opened
+            // Use marked.parse for robust Markdown to HTML conversion
+            businessPlanContentDiv.innerHTML = marked.parse(businessPlanMarkdown);
+
+            // 버튼 클릭 시 모달 열기
+            openBusinessPlanBtn.addEventListener('click', () => {
+                businessPlanModal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden'); // 배경 스크롤 방지
+            });
+        };
+
+        /**
+         * 모달 닫기 함수
+         * @param {Event} event - 클릭 이벤트 객체
+         */
+        function closeModal(event) {
+            // 모달 콘텐츠 영역을 직접 클릭한 경우에는 닫지 않음 (이벤트 버블링 방지)
+            if (event && event.target.closest('.modal-content')) {
+                return;
+            }
+            const businessPlanModal = document.getElementById('businessPlanModal');
+            businessPlanModal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden'); // 배경 스크롤 허용
+        }
+
+        /**
+         * 단일 방명록 항목의 HTML을 생성하고 리스트에 추가합니다.
+         * 이 함수는 주로 새로운 항목을 동적으로 추가할 때 사용됩니다.
+         * @param {object} entry - 방명록 항목 데이터 (name, message, date 속성 포함)
+         * @param {boolean} prepend - true면 리스트 맨 앞에, false면 맨 뒤에 추가합니다.
+         */
+        function displaySingleEntry(entry, prepend = false) {
+            const entriesList = document.getElementById('entriesList');
+
+            // 목록이 비어 있거나 로딩 중일 때 (첫 항목이 추가될 때) 기존 메시지를 지웁니다.
+            if (entriesList.innerHTML.includes('loading') || entriesList.innerHTML.includes('아직 작성된 방명록이 없습니다')) {
+                entriesList.innerHTML = '';
+            }
+
+            // 메시지 내용 앞뒤 공백을 제거하고, 줄 바꿈을 <br> 태그로 변환합니다.
+            const cleanedMessage = escapeHtml(entry.message).trim().replace(/\n/g, '<br>');
+
+            // 템플릿 리터럴 내부의 불필요한 공백을 제거하여 최종 렌더링에 영향을 주지 않도록 합니다.
+            const html = `
+                <div class="entry bg-white p-5 mb-4 rounded-xl shadow-md border-l-4 border-blue-500 hover:shadow-lg transition-shadow duration-200">
+                    <div class="flex justify-between items-center text-xs text-gray-500 mb-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="entry-name font-bold text-gray-800 text-base">👤 ${escapeHtml(entry.name)}</span>
+                        </div>
+                        <span class="text-gray-500">${entry.date}</span>
+                    </div>
+                    <div class="entry-message mt-3 text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">${cleanedMessage}</div>
+                </div>
+            `;
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html.trim(); // 생성된 HTML 문자열 자체의 앞뒤 공백도 제거
+
+            if (prepend) {
+                entriesList.prepend(tempDiv.firstChild); // 새로운 항목을 맨 앞에 추가
+            } else {
+                entriesList.appendChild(tempDiv.firstChild); // (이 경로는 displayEntries에서 사용되지 않음)
+            }
+            updateParentHeight();
+        }
+
+        // 폼 제출 처리
+        function submitForm() {
+            const submitBtn = document.getElementById('submitBtn');
+            const name = document.getElementById('name').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            // 입력값 유효성 검사
+            if (!name || !message) {
+                showMessage('이름과 메시지를 모두 입력해주세요.', 'error');
+                return;
+            }
+
+            // 버튼 비활성화 및 텍스트 변경
+            submitBtn.disabled = true;
+            submitBtn.textContent = '등록 중...';
+
+            // google.script.run을 사용하여 서버 함수 호출
+            google.script.run
+                .withSuccessHandler(function() {
+                    // 성공 메시지는 표시하지 않음
+                    // 폼 필드 초기화
+                    document.getElementById('name').value = '';
+                    document.getElementById('message').value = '';
+
+                    // 임시로 새로운 항목을 클라이언트 사이드에 추가하여 즉시 반영
+                    // 참고: 서버에서 반환되는 정확한 시간 형식이 아닌, 클라이언트 시간 기준으로 표시됩니다.
+                    // 정확한 동기화를 위해서는 서버 응답에 시간 정보가 포함되어야 합니다.
+                    const now = new Date().toLocaleString('ko-KR');
+                    const tempEntry = { name: name, message: message, date: now };
+                    displaySingleEntry(tempEntry, true); // 새로운 항목을 맨 앞에 추가
+                })
+                .withFailureHandler(function(error) {
+                    showMessage('오류가 발생했습니다: ' + error.message, 'error');
+                })
+                .saveGuestbookEntry(name, message);
+
+            // 2초 후 버튼 다시 활성화 (성공/실패와 무관하게 UX 개선)
+            setTimeout(function() {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '등록하기';
+            }, 2000);
+        }
+
+        // Enter 키로 폼 제출
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && (e.target.id === 'name' || e.target.id === 'message')) {
+                if (e.target.id === 'name') {
+                    document.getElementById('message').focus();
+                } else {
+                    submitForm();
+                }
+            }
+        });
+
+        // 방명록 목록 불러오기
+        function loadEntries() {
+            document.getElementById('entriesList').innerHTML = '<div class="text-center text-gray-600 py-6 loading">방명록을 불러오는 중...</div>';
+
+            google.script.run
+                .withSuccessHandler(displayEntries)
+                .withFailureHandler(function(error) {
+                    console.error('방명록 로드 오류:', error);
+                    document.getElementById('entriesList').innerHTML = '<div class="text-center bg-red-100 text-red-800 p-3 rounded-lg border border-red-200">방명록을 불러오는데 실패했습니다.</div>';
+                })
+                .getGuestbookEntries();
+        }
+
+        /**
+         * 서버에서 받아온 모든 방명록 목록을 화면에 표시합니다.
+         * 이 함수는 한 번의 DOM 조작으로 전체 목록을 업데이트하여 효율성을 높입니다.
+         * @param {Array<object>} entries - 방명록 항목들의 배열
+         */
+        function displayEntries(entries) {
+            const entriesList = document.getElementById('entriesList');
+            entriesList.innerHTML = ''; // 기존 목록을 한 번에 비웁니다.
+
+            if (entries.length === 0) {
+                entriesList.innerHTML = '<div class="text-center text-gray-600 py-6">아직 작성된 방명록이 없습니다.</div>';
+                updateParentHeight();
+                return;
+            }
+
+            let htmlContent = '';
+            // 모든 항목의 HTML을 하나의 문자열로 조합합니다.
+            entries.forEach(function(entry) {
+                const cleanedMessage = escapeHtml(entry.message).trim().replace(/\n/g, '<br>');
+                htmlContent += `
+                    <div class="entry bg-white p-5 mb-4 rounded-xl shadow-md border-l-4 border-blue-500 hover:shadow-lg transition-shadow duration-200">
+                        <div class="flex justify-between items-center text-xs text-gray-500 mb-2">
+                            <div class="flex items-center space-x-2">
+                                <span class="entry-name font-bold text-gray-800 text-base">👤 ${escapeHtml(entry.name)}</span>
+                            </div>
+                            <span class="text-gray-500">${entry.date}</span>
+                        </div>
+                        <div class="entry-message mt-3 text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">${cleanedMessage}</div>
+                    </div>
+                `;
+            });
+            // 조합된 HTML 문자열을 한 번에 DOM에 삽입합니다.
+            entriesList.innerHTML = htmlContent;
+            updateParentHeight();
+        }
+
+        // 메시지 표시 (오류 시에만)
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('responseMessage');
+            // 'error' 타입일 때만 메시지 표시
+            if (type === 'error') {
+                messageDiv.innerHTML = `
+                    <div class="message p-3 my-4 rounded-lg text-sm bg-red-100 text-red-800 border border-red-200">
+                        ${message}
+                    </div>
+                `;
+                setTimeout(function() {
+                    messageDiv.innerHTML = '';
+                    updateParentHeight();
+                }, 5000); // 5초 후 메시지 사라짐
+            }
+            updateParentHeight();
+        }
+
+        // HTML 이스케이프 유틸리티 함수
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 부모 창 높이 업데이트 (iframe 환경에서 높이 조절)
+        function updateParentHeight() {
+            setTimeout(function() {
+                const height = Math.max(
+                    document.body.scrollHeight,
+                    document.body.offsetHeight,
+                    document.documentElement.scrollHeight,
+                    document.documentElement.offsetHeight
+                ) + 20; // 여백 추가
+
+                if (window.parent !== window) {
+                    window.parent.postMessage({height: height}, '*');
+                }
+            }, 100);
+        }
+    </script>
+</body>
+</html>
